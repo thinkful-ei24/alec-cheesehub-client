@@ -1,15 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {fetchCheeses} from 'productActions';
+import {fetchCheeses} from './actions';
 
 class CheeseList extends React.Component{
   componentDidMount(){
-    this.props.dispatch(fetchCheeses())
+    this.props.dispatch(fetchCheeses());
   }
 
   render(){
     if(this.props.error){
-       return <div>Error! {error.message}</div>;
+       return <div>Error! {this.props.error}</div>;
     }
 
     if(this.props.loading){
@@ -17,16 +17,21 @@ class CheeseList extends React.Component{
     }
     return (
       <ul>
-      {this.cheeses.map(cheese =>
-        <li key={product.id}>{product.name}</li>
+      {this.props.cheeses.map(cheese =>
+        <li key={cheese}>{cheese}</li>
       )}
       </ul>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  cheeses: state.cheeses;
-});
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    cheeses: state.cheeseReducer.cheeses,
+    loading: state.cheeseReducer.loading,
+    error: state.cheeseReducer.error
+  };
+};
 
 export default connect(mapStateToProps)(CheeseList);
